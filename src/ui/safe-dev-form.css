@@ -1,0 +1,42 @@
+.safe-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.safe-form__actions {
+  margin: 0.5rem 0.5rem 1rem 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.safe-form__button {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.safe-form__button--cancel {
+  background-color: #e5e7eb; /* gray-300 */
+  color: #000;
+}
+
+.safe-form__button--cancel:hover {
+  background-color: #d1d5db; /* gray-400 */
+}
+
+.safe-form__button--submit {
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+}
+
+.safe-form__button--submit:hover {
+  background-color: #1d4ed8; /* blue-700 */
+}
+
+.safe-form__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
