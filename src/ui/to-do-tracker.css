@@ -10,7 +10,6 @@
 
   /* 전체 padding 제거 */
   padding: 0;
-  overflow: hidden; /* border-radius 안에서 헤더가 깔끔하게 붙도록 */
 }
 
 .tracker-header {
@@ -19,7 +18,6 @@
   justify-content: space-between;
   cursor: move;
   gap: 6px;
-
   background: #ddf4ff; /* 연한 파랑 */
   padding: 4px 6px; /* 최소한의 안쪽 여백 */
   border-bottom: 1px solid #e5e7eb;
@@ -176,4 +174,35 @@
 
 .tracker-hint-wrapper:hover .tracker-hint {
   display: block;
+}
+
+.tracker-empty {
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-delete-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #dc2626; /* red-600 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-delete-btn:hover {
+  color: #b91c1c; /* red-700 */
+}
+
+.todo-control {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
 }

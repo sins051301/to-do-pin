@@ -1,6 +1,14 @@
 import { useState, useRef } from "react";
 import { useToDoPin } from "../context/useTodoPin";
-import { Eye, EyeOff, Download, Upload, HelpCircle } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Download,
+  Upload,
+  HelpCircle,
+  Inbox,
+  Trash2,
+} from "lucide-react";
 import "./to-do-tracker.css";
 
 type TodoTask = {
@@ -19,7 +27,13 @@ type PinItem = {
 };
 
 function TodoTracker() {
-  const { todos: pins, register, visible, toggleVisible } = useToDoPin();
+  const {
+    todos: pins,
+    register,
+    remove,
+    visible,
+    toggleVisible,
+  } = useToDoPin();
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [open, setOpen] = useState(true);
   const [pos, setPos] = useState({ x: 5, y: 5 });
@@ -153,7 +167,7 @@ function TodoTracker() {
             onChange={handleImport}
           />
 
-          {/* Hint (hover시 툴팁) */}
+          {/* Hint */}
           <div className="tracker-hint-wrapper">
             <button className="tracker-btn" title="도움말">
               <HelpCircle size={16} />
@@ -180,54 +194,77 @@ function TodoTracker() {
 
       {open && (
         <ul className="tracker-list">
-          {Object.entries(groupedPins).map(([url, pins]) => (
-            <li key={url} className="tracker-item">
-              <div className="tracker-group">
-                <div className="tracker-url">위치: {url}</div>
-              </div>
-              <ul className="todo-sublist">
-                {pins.map((pin) => (
-                  <li key={pin.id} className="tracker-item">
-                    <div
-                      className="tracker-group"
-                      onClick={() =>
-                        setCollapsed((prev) => ({
-                          ...prev,
-                          [pin.id]: !prev[pin.id],
-                        }))
-                      }
-                    >
-                      <div className="tracker-url">
-                        {pin.title || "(제목 없음)"}
-                      </div>
-                      <span className="tracker-arrow">
-                        {collapsed[pin.id] ? "▸" : "▾"}
-                      </span>
-                    </div>
-                    {!collapsed[pin.id] && (
-                      <ul className="todo-sublist">
-                        {pin.todos.map((todo) => (
-                          <li
-                            key={`${pin.id}-${todo.text}`}
-                            className="todo-item"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={todo.checked}
-                              onChange={() => toggleCheck(pin.id, todo.text)}
-                            />
-                            <span className={todo.checked ? "checked" : ""}>
-                              {todo.text}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
+          {Object.keys(groupedPins).length === 0 ? (
+            <li className="tracker-empty">
+              <Inbox size={16} style={{ marginRight: "4px" }} />할 일이
+              없습니다.
             </li>
-          ))}
+          ) : (
+            Object.entries(groupedPins).map(([url, pins]) => (
+              <li key={url} className="tracker-item">
+                <div className="tracker-group">
+                  <div className="tracker-url">위치: {url}</div>
+                </div>
+                <ul className="todo-sublist">
+                  {pins.map((pin) => (
+                    <li key={pin.id} className="tracker-item">
+                      <div
+                        className="tracker-group"
+                        onClick={() =>
+                          setCollapsed((prev) => ({
+                            ...prev,
+                            [pin.id]: !prev[pin.id],
+                          }))
+                        }
+                      >
+                        <div className="tracker-url">
+                          {pin.title || "(제목 없음)"}
+                        </div>
+                        <div className="todo-control">
+                          <span className="tracker-arrow">
+                            {collapsed[pin.id] ? "▸" : "▾"}
+                          </span>
+
+                          <button
+                            className="todo-delete-btn"
+                            onClick={() => {
+                              if (
+                                window.confirm("정말 이 핀을 삭제하시겠습니까?")
+                              ) {
+                                remove(pin.id);
+                              }
+                            }}
+                            title="핀 삭제"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      {!collapsed[pin.id] && (
+                        <ul className="todo-sublist">
+                          {pin.todos.map((todo) => (
+                            <li
+                              key={`${pin.id}-${todo.text}`}
+                              className="todo-item"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={todo.checked}
+                                onChange={() => toggleCheck(pin.id, todo.text)}
+                              />
+                              <span className={todo.checked ? "checked" : ""}>
+                                {todo.text}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))
+          )}
         </ul>
       )}
     </div>

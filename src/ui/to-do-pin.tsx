@@ -87,7 +87,10 @@ function TodoPin({
             />
             <button
               type="button"
-              onClick={handleDelete}
+              onClick={() =>
+                window.confirm("정말 이 DevPin을 삭제하시겠습니까?") &&
+                handleDelete()
+              }
               disabled={deleting}
               className="devpin-delete-btn"
               title="이 DevPin 삭제"
