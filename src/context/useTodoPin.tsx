@@ -1,5 +1,3 @@
-"use client";
-
 import { useContext, createContext } from "react";
 import type { ToDoPinContextType } from "./to-do-pin-provider";
 

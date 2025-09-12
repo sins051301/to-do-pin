@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef } from "react";
 import { useToDoPin } from "../context/useTodoPin";
 import { Eye, EyeOff, Download, Upload, HelpCircle } from "lucide-react";

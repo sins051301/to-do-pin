@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useToDoPin } from "../context/useTodoPin";
 import type { TodoTask } from "../type";

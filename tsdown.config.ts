@@ -14,6 +14,9 @@ export default defineConfig([
       "react-router-dom",
       "lucide-react",
     ],
-    outDir: "dist", // 출력 경로
+    outDir: "dist",
+    banner: {
+      js: '"use client";',
+    },
   },
 ]);

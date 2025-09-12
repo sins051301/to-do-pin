@@ -1,69 +1,98 @@
-# React + TypeScript + Vite
+# To-Do Pin 📌
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[English](#english) | [한국어](#korean)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## English
 
-## Expanding the ESLint configuration
+### Overview
+**To-Do Pin** is an npm library that allows you to store your tasks in **localStorage** and display them as a simple UI overlay.  
+- Create new to-do pins with **Alt+Click** anywhere on the page.  
+- Track all tasks across pages using the **To-Do Tracker**.  
+- Delete tasks when no longer needed.  
+- Export and import tasks as JSON to **backup or restore** when localStorage is cleared.  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation
+```bash
+npm install to-do-pin
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Usage
+Wrap your app with the `ToDoPinProvider`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```tsx
+import { ToDoPinProvider } from "to-do-pin";
+import "to-do-pin/index.css";
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+export default function App() {
+  return (
+    <ToDoPinProvider>
+      <YourApp />
+    </ToDoPinProvider>
+  );
+}
 ```
+
+### Environment Variables
+To enable development mode features (tracker overlay, global pin client, etc.), set the environment variable:
+
+- **Vite / CRA**
+```env
+VITE_TO_DO_PIN_ENV=development
+```
+
+- **Next.js**
+```env
+NEXT_PUBLIC_TO_DO_PIN_ENV=development
+```
+
+---
+
+## 한국어
+
+### 개요
+**To-Do Pin**은 **localStorage**에 할 일을 저장하고, 이를 간단한 UI로 표시하는 npm 라이브러리입니다.  
+- **Alt+Click**으로 페이지 어디서든 새로운 할 일을 생성할 수 있습니다.  
+- **To-Do Tracker**를 통해 모든 페이지의 할 일을 추적할 수 있습니다.  
+- 필요 없는 할 일은 삭제할 수 있습니다.  
+- JSON 파일로 내보내기/불러오기를 통해 **백업 및 복구**가 가능합니다.  
+
+### 설치
+```bash
+npm install to-do-pin
+```
+
+### 사용법
+앱의 최상단에 `ToDoPinProvider`를 감싸주세요:
+
+```tsx
+import { ToDoPinProvider } from "to-do-pin";
+import "to-do-pin/index.css";
+
+export default function App() {
+  return (
+    <ToDoPinProvider>
+      <YourApp />
+    </ToDoPinProvider>
+  );
+}
+```
+
+### 환경 변수 설정
+개발 모드 기능(트래커, 글로벌 핀 생성기 등)을 활성화하려면 환경 변수를 설정해야 합니다.
+
+- **Vite / CRA**
+```env
+VITE_TO_DO_PIN_ENV=development
+```
+
+- **Next.js**
+```env
+NEXT_PUBLIC_TO_DO_PIN_ENV=development
+```
+
+---
+
+## License
+MIT
