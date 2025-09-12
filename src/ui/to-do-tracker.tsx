@@ -183,7 +183,7 @@ function TodoTracker() {
           {Object.entries(groupedPins).map(([url, pins]) => (
             <li key={url} className="tracker-item">
               <div className="tracker-group">
-                <div className="tracker-url">{url}</div>
+                <div className="tracker-url">위치: {url}</div>
               </div>
               <ul className="todo-sublist">
                 {pins.map((pin) => (
