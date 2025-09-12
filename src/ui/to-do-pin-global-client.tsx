@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { useToDoPin } from "../context/useTodoPin";
 import type { TodoTask } from "../type";
@@ -13,7 +12,6 @@ export default function ToDoPinGlobalClient() {
   const [description, setDescription] = useState("");
   const [todos, setTodos] = useState<TodoTask[]>([]);
   const [newTodo, setNewTodo] = useState("");
-  const { pathname } = useLocation();
   const { register } = useToDoPin();
 
   const handleClose = useCallback(() => {
@@ -52,7 +50,7 @@ export default function ToDoPinGlobalClient() {
     e.preventDefault();
     const props = {
       id: crypto.randomUUID(),
-      url: pathname,
+      url: window.location.pathname,
       title,
       description,
       todos,

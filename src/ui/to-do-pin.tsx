@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useToDoPin } from "../context/useTodoPin";
 import type { TodoTask } from "../type";
 import "./to-do-pin.css";
@@ -28,7 +27,6 @@ function TodoPin({
   const [todoOpen, setTodoOpen] = useState(false);
   const [removed, setRemoved] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const { pathname } = useLocation();
   const { register, remove } = useToDoPin();
 
   const toggleCheck = (todoText: string) => {
@@ -39,7 +37,7 @@ function TodoPin({
       id,
       x,
       y,
-      url: pathname,
+      url: window.location.pathname,
       title,
       description,
       todos: updatedTodos,
@@ -51,12 +49,12 @@ function TodoPin({
       id,
       x,
       y,
-      url: pathname,
+      url: window.location.pathname,
       title,
       description,
       todos,
     });
-  }, [pathname]);
+  }, []);
 
   const handleDelete = () => {
     if (deleting) return;

@@ -1,3 +1,5 @@
+"use client";
+
 import { useLocation } from "react-router-dom";
 import { useToDoPin } from "../context/useTodoPin";
 import TodoPin from "./to-do-pin";
