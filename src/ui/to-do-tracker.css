@@ -3,25 +3,43 @@
   z-index: 9999;
   border: 1px solid #ccc;
   background: white;
-  padding: 8px;
   font-size: 12px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   color: black;
+
+  /* 전체 padding 제거 */
+  padding: 0;
+  overflow: hidden; /* border-radius 안에서 헤더가 깔끔하게 붙도록 */
 }
 
 .tracker-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
   cursor: move;
-  gap: 8px;
+  gap: 6px;
+
+  background: #ddf4ff; /* 연한 파랑 */
+  padding: 4px 6px; /* 최소한의 안쪽 여백 */
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .tracker-title {
   font-weight: bold;
+  font-size: 12px;
   user-select: none;
+  margin: 0;
+}
+
+.tracker-list {
+  max-height: 240px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 6px; /* 본문 padding만 따로 */
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af #f3f4f6;
 }
 
 .tracker-toggle {
@@ -31,15 +49,6 @@
   cursor: pointer;
 }
 
-.tracker-list {
-  max-height: 240px;
-  overflow-y: auto;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  scrollbar-width: thin;
-  scrollbar-color: #9ca3af #f3f4f6;
-}
 .tracker-item {
   list-style: none;
 }
@@ -65,7 +74,7 @@
 }
 
 .tracker-url {
-  font-size: 10px;
+  font-size: 12px;
   color: #6b7280;
   white-space: nowrap;
   overflow: hidden;
