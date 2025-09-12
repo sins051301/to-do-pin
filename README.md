@@ -11,7 +11,8 @@
 
 ### Overview
 **To-Do Pin** is an npm library that allows you to store your tasks in **localStorage** and display them as a simple UI overlay.  
-- Create new to-do pins with **Alt+Click** anywhere on the page.  
+- Create new to-do pins with **Alt+Click** anywhere on the page.
+- On MacBook, you can create a new task anywhere on the page with Option+Click.
 - Track all tasks across pages using the **To-Do Tracker**.  
 - Delete tasks when no longer needed.  
 - Export and import tasks as JSON to **backup or restore** when localStorage is cleared.  
@@ -56,7 +57,8 @@ NEXT_PUBLIC_TO_DO_PIN_ENV=development
 
 ### 개요
 **To-Do Pin**은 **localStorage**에 할 일을 저장하고, 이를 간단한 UI로 표시하는 npm 라이브러리입니다.  
-- **Alt+Click**으로 페이지 어디서든 새로운 할 일을 생성할 수 있습니다.  
+- **Alt+Click**으로 페이지 어디서든 새로운 할 일을 생성할 수 있습니다.
+- 맥북의 경우 Option+Click으로 페이지 어디서든 새로운 할 일을 생성할 수 있습니다.
 - **To-Do Tracker**를 통해 모든 페이지의 할 일을 추적할 수 있습니다.  
 - 필요 없는 할 일은 삭제할 수 있습니다.  
 - JSON 파일로 내보내기/불러오기를 통해 **백업 및 복구**가 가능합니다.  
