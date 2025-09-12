@@ -4,7 +4,7 @@
 
 ---
 
-![npm 홍보](https://github.com/user-attachments/assets/9bef687a-56e1-4a8b-8638-2d85705d3641)
+![npm 홍보](https://github.com/user-attachments/assets/761ba05a-ff07-4d2a-9ce2-81b0d89b959a)
 
 
 ## English
