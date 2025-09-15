@@ -4,7 +4,8 @@
 
 ---
 
-![npm 홍보](https://github.com/user-attachments/assets/761ba05a-ff07-4d2a-9ce2-81b0d89b959a)
+
+![최신](https://github.com/user-attachments/assets/02ffb6bc-4462-4c1a-81e8-1f21a7db0c88)
 
 
 ## English
@@ -45,6 +46,8 @@ To enable git integration, set the environment variable.
 VITE_GITHUB_URL should be set to your repository URL without `https://api.github.com`.
 VITE_GITHUB_TOKEN should be set to your GitHub personal access token.
 
+## Github Setting
+![발급진](https://github.com/user-attachments/assets/9d21b24f-6ce7-4db5-9c9c-00afd88099de)
 
 - **Vite / CRA**
 ```env
@@ -99,6 +102,11 @@ export default function App() {
 깃허브 연동을 위해서는 `VITE_GITHUB_URL`과 `VITE_GITHUB_TOKEN` 환경 변수를 설정해야 합니다.
 깃허브 연동을 위한 VITE_GITHUB_URL은 github.com을 제외한 자신의 레포지토리 주소,
 VITE_GITHUB_TOKEN은 깃허브의 토큰입니다.
+
+
+## 깃허브 설정 방법
+![발급진](https://github.com/user-attachments/assets/87e17ed4-fd33-4f3f-a425-a5a3bed7cd53)
+
 
 - **Vite / CRA**
 ```env
