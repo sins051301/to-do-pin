@@ -12,7 +12,7 @@ export default function ToDoPinGlobalClient() {
   const [description, setDescription] = useState("");
   const [todos, setTodos] = useState<TodoTask[]>([]);
   const [newTodo, setNewTodo] = useState("");
-  const { register } = useToDoPin();
+  const { register, git } = useToDoPin();
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -46,7 +46,7 @@ export default function ToDoPinGlobalClient() {
     setTodos((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const props = {
       id: crypto.randomUUID(),
@@ -57,10 +57,52 @@ export default function ToDoPinGlobalClient() {
       x,
       y,
       createdAt: Date.now(),
+      issueNumber: 0,
     };
 
     try {
+      const gitUrl =
+        import.meta.env.VITE_GITHUB_URL || process.env.NEXT_PUBLIC_GITHUB_URL;
+      const gitToken =
+        import.meta.env.VITE_GITHUB_TOKEN ||
+        process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+
+      if (git && gitUrl && gitToken) {
+        const issueBody = [
+          "## 어떤 작업인가요?",
+          "",
+          (description && description.trim()) ||
+            "할 작업에 대해 간결하게 설명해 주세요",
+          "",
+          "## 작업 상세 내용",
+          "",
+          ...(todos.length
+            ? todos.map((t) => `- [ ] ${t.text}`)
+            : ["- [ ] TODO"]),
+        ].join("\n");
+
+        const res = await fetch(`${gitUrl}`, {
+          method: "POST",
+          headers: {
+            Authorization: `token ${gitToken}`,
+            Accept: "application/vnd.github+json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            body: issueBody,
+          }),
+        });
+
+        if (!res.ok) {
+          console.error("❌ GitHub Issue 생성 실패:", await res.text());
+        } else {
+          const data = await res.json();
+          props.issueNumber = Number(data.number);
+        }
+      }
       register(props);
+
       setOpen(false);
       setTitle("");
       setDescription("");
@@ -70,7 +112,6 @@ export default function ToDoPinGlobalClient() {
       console.error("❌ 저장 실패", err);
     }
   };
-
   if (!open) return null;
 
   return (

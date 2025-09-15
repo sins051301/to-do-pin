@@ -24,6 +24,7 @@ type PinItem = {
   todos: TodoTask[];
   title?: string;
   description?: string;
+  issueNumber: number;
 };
 
 function TodoTracker() {
@@ -33,6 +34,8 @@ function TodoTracker() {
     remove,
     visible,
     toggleVisible,
+    git,
+    setGit,
   } = useToDoPin();
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [open, setOpen] = useState(true);
@@ -137,12 +140,16 @@ function TodoTracker() {
       >
         <h2 className="tracker-title">Todo Tracker</h2>
         <div className="tracker-actions">
-          {/* 가시성 토글 */}
+          <button
+            className={`tracker-btn github-btn ${git ? "linked" : "unlinked"}`}
+            onClick={() => setGit(!git)}
+            title={git ? "GitHub 연동됨" : "GitHub 연동 안됨"}
+          >
+            {git ? "GitHub ✓" : "GitHub X"}
+          </button>
           <button onClick={toggleVisible} className="tracker-btn">
             {visible ? <Eye size={16} /> : <EyeOff size={16} />}
           </button>
-
-          {/* 내보내기 */}
           <button
             onClick={handleExport}
             className="tracker-btn"

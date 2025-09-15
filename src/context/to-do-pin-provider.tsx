@@ -24,6 +24,7 @@ type TodoItem = {
   todos: TodoTask[];
   title?: string;
   description?: string;
+  issueNumber: number;
 };
 
 export type ToDoPinContextType = {
@@ -32,12 +33,15 @@ export type ToDoPinContextType = {
   toggleVisible: () => void;
   register: (item: TodoItem) => void;
   remove: (id: string) => void;
+  git: boolean;
+  setGit: (git: boolean) => void;
 };
 
 export function ToDoPinProvider({ children }: { children: ReactNode }) {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [visible, setVisible] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [git, setGit] = useState(false);
 
   const toggleVisible = useCallback(() => {
     setVisible((prev) => !prev);
@@ -81,8 +85,8 @@ export function ToDoPinProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo(
-    () => ({ todos, register, remove, visible, toggleVisible }),
-    [todos, register, remove, visible, toggleVisible]
+    () => ({ todos, register, remove, visible, toggleVisible, git, setGit }),
+    [todos, register, remove, visible, toggleVisible, git, setGit]
   );
 
   const devEnv =

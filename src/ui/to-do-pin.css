@@ -116,3 +116,69 @@
   border-right: 6px solid transparent;
   border-top: 8px solid black;
 }
+
+.devpin-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.devpin-edit-btn,
+.devpin-save-btn,
+.devpin-cancel-btn {
+  font-size: 11px;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 20px;
+}
+
+.devpin-edit-btn {
+  background: #2563eb;
+  color: #fff;
+}
+.devpin-edit-btn:hover {
+  background: #1d4ed8;
+}
+.devpin-save-btn {
+  background: #2563eb;
+  color: #fff;
+  margin-left: 6px;
+}
+.devpin-save-btn:hover {
+  background: #1d4ed8;
+}
+.devpin-cancel-btn {
+  background-color: #ef4444;
+  color: #fff;
+}
+.devpin-cancel-btn:hover {
+  background-color: #dc2626;
+}
+
+.devpin-input {
+  width: 60%;
+  font-size: 13px;
+  padding: 4px 6px;
+  margin-top: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+}
+.devpin-textarea {
+  width: 90%;
+  font-size: 13px;
+  padding: 4px 6px;
+  margin-top: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.devpin-input2 {
+  width: 80%;
+  font-size: 13px;
+  padding: 4px 6px;
+  margin-top: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+}
