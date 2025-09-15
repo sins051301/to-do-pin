@@ -85,18 +85,21 @@ export default function ToDoPinGlobalClient() {
             : ["- [ ] TODO"]),
         ].join("\n");
 
-        const res = await fetch(`${gitUrl}`, {
-          method: "POST",
-          headers: {
-            Authorization: `token ${gitToken}`,
-            Accept: "application/vnd.github+json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title,
-            body: issueBody,
-          }),
-        });
+        const res = await fetch(
+          `https://api.github.com/repos/${gitUrl}/issues`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `token ${gitToken}`,
+              Accept: "application/vnd.github+json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title,
+              body: issueBody,
+            }),
+          }
+        );
 
         if (!res.ok) {
           console.error("❌ GitHub Issue 생성 실패:", await res.text());

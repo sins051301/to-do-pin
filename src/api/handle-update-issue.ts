@@ -32,15 +32,18 @@ export default async function handleUpdateIssue(
       : ["- [ ] TODO"]),
   ].join("\n");
 
-  const res = await fetch(`${gitUrl}/${issueNumber}`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `token ${gitToken}`,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ title, body: issueBody }),
-  });
+  const res = await fetch(
+    `https://api.github.com/repos/${gitUrl}/issues/${issueNumber}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `token ${gitToken}`,
+        Accept: "application/vnd.github+json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, body: issueBody }),
+    }
+  );
 
   if (!res.ok) {
     console.error("❌ GitHub Issue 수정 실패:", await res.text());
