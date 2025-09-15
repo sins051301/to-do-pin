@@ -62,10 +62,14 @@ export default function ToDoPinGlobalClient() {
 
     try {
       const gitUrl =
-        import.meta.env.VITE_GITHUB_URL || process.env.NEXT_PUBLIC_GITHUB_URL;
+        typeof import.meta !== "undefined" && import.meta.env?.VITE_GITHUB_URL
+          ? import.meta.env.VITE_GITHUB_URL
+          : process.env.NEXT_PUBLIC_GITHUB_URL;
+
       const gitToken =
-        import.meta.env.VITE_GITHUB_TOKEN ||
-        process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+        typeof import.meta !== "undefined" && import.meta.env?.VITE_GITHUB_TOKEN
+          ? import.meta.env.VITE_GITHUB_TOKEN
+          : process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
       if (git && gitUrl && gitToken) {
         const issueBody = [
