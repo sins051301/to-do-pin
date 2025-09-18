@@ -147,6 +147,8 @@
   gap: 4px;
   align-items: center;
   justify-content: center;
+  height: 25px;
+  margin-top: 2px;
 }
 
 .tracker-btn {
@@ -223,7 +225,6 @@
 .github-btn {
   font-size: 12px;
   font-weight: bold;
-  padding: 2px 6px;
   border-radius: 4px;
 }
 
