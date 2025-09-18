@@ -10,6 +10,7 @@ import ToDoTracker from "../ui/to-do-tracker";
 import DevPinGlobalClient from "../ui/to-do-pin-global-client";
 import TodoPinList from "../ui/to-do-pin-list";
 import { ToDoPinContext } from "./useTodoPin";
+import { devEnv } from "./variable";
 
 type TodoTask = {
   text: string;
@@ -88,12 +89,6 @@ export function ToDoPinProvider({ children }: { children: ReactNode }) {
     () => ({ todos, register, remove, visible, toggleVisible, git, setGit }),
     [todos, register, remove, visible, toggleVisible, git, setGit]
   );
-
-  const devEnv =
-    (typeof import.meta !== "undefined" &&
-      (import.meta as { env: Record<string, string> }).env
-        ?.VITE_TO_DO_PIN_ENV) ||
-    process.env.NEXT_PUBLIC_TO_DO_PIN_ENV;
 
   if (!mounted) return <>{children}</>;
 

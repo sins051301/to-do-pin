@@ -1,14 +1,6 @@
+import { gitUrl, gitToken } from "../context/variable";
+
 const handleCloseIssue = async (issueNumber: number) => {
-  const gitUrl =
-    typeof import.meta !== "undefined" && import.meta.env?.VITE_GITHUB_URL
-      ? import.meta.env.VITE_GITHUB_URL
-      : process.env.NEXT_PUBLIC_GITHUB_URL;
-
-  const gitToken =
-    typeof import.meta !== "undefined" && import.meta.env?.VITE_GITHUB_TOKEN
-      ? import.meta.env.VITE_GITHUB_TOKEN
-      : process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-
   if (!gitUrl || !gitToken) {
     console.error("❌ GitHub URL 또는 Token 없음");
     return;

@@ -1,129 +1,31 @@
-import { useCallback, useEffect, useState } from "react";
-import { useToDoPin } from "../context/useTodoPin";
-import type { TodoTask } from "../type";
 import SafeDevForm from "./dev-safe-form";
 import "./to-do-pin-global.css";
+import { createPortal } from "react-dom";
+import useHandleGlobalPin from "../context/useHandleGlobalPin";
 
 export default function ToDoPinGlobalClient() {
-  const [open, setOpen] = useState(false);
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [todos, setTodos] = useState<TodoTask[]>([]);
-  const [newTodo, setNewTodo] = useState("");
-  const { register, git } = useToDoPin();
+  const {
+    open,
+    handleClose,
+    handleSubmit,
+    addTodo,
+    removeTodo,
+    x,
+    y,
+    title,
+    description,
+    todos,
+    newTodo,
+    setTitle,
+    setDescription,
+    setNewTodo,
+  } = useHandleGlobalPin();
 
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, []);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (!e.altKey) return;
-      e.preventDefault();
-      setX(e.clientX);
-      setY(e.clientY);
-      setOpen(true);
-    };
-
-    window.addEventListener("click", handler);
-    return () => window.removeEventListener("click", handler);
-  }, []);
-
-  const addTodo = () => {
-    const t = newTodo.trim();
-    if (!t) return;
-    if (todos.some((todo) => todo.text === t)) {
-      setNewTodo("");
-      return;
-    }
-    setTodos((prev) => [...prev, { text: t, checked: false }]);
-    setNewTodo("");
-  };
-
-  const removeTodo = (idx: number) => {
-    setTodos((prev) => prev.filter((_, i) => i !== idx));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const props = {
-      id: crypto.randomUUID(),
-      url: window.location.pathname,
-      title,
-      description,
-      todos,
-      x,
-      y,
-      createdAt: Date.now(),
-      issueNumber: 0,
-    };
-
-    try {
-      const gitUrl =
-        typeof import.meta !== "undefined" && import.meta.env?.VITE_GITHUB_URL
-          ? import.meta.env.VITE_GITHUB_URL
-          : process.env.NEXT_PUBLIC_GITHUB_URL;
-
-      const gitToken =
-        typeof import.meta !== "undefined" && import.meta.env?.VITE_GITHUB_TOKEN
-          ? import.meta.env.VITE_GITHUB_TOKEN
-          : process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-
-      if (git && gitUrl && gitToken) {
-        const issueBody = [
-          "## 어떤 작업인가요?",
-          "",
-          (description && description.trim()) ||
-            "할 작업에 대해 간결하게 설명해 주세요",
-          "",
-          "## 작업 상세 내용",
-          "",
-          ...(todos.length
-            ? todos.map((t) => `- [ ] ${t.text}`)
-            : ["- [ ] TODO"]),
-        ].join("\n");
-
-        const res = await fetch(
-          `https://api.github.com/repos/${gitUrl}/issues`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `token ${gitToken}`,
-              Accept: "application/vnd.github+json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              title,
-              body: issueBody,
-            }),
-          }
-        );
-
-        if (!res.ok) {
-          console.error("❌ GitHub Issue 생성 실패:", await res.text());
-        } else {
-          const data = await res.json();
-          props.issueNumber = Number(data.number);
-        }
-      }
-      register(props);
-
-      setOpen(false);
-      setTitle("");
-      setDescription("");
-      setTodos([]);
-      setNewTodo("");
-    } catch (err) {
-      console.error("❌ 저장 실패", err);
-    }
-  };
   if (!open) return null;
 
-  return (
+  return createPortal(
     <SafeDevForm
-      title="저장"
+      title="Save"
       buttonClassName="btn-save"
       onSubmit={handleSubmit}
       handleClose={handleClose}
@@ -144,7 +46,7 @@ export default function ToDoPinGlobalClient() {
         <label className="form-label">Title</label>
         <input
           type="text"
-          placeholder="제목"
+          placeholder="Title"
           className="form-input"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -154,7 +56,7 @@ export default function ToDoPinGlobalClient() {
         <label className="form-label">Description</label>
         <input
           type="text"
-          placeholder="설명"
+          placeholder="Description"
           className="form-input"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -166,7 +68,7 @@ export default function ToDoPinGlobalClient() {
             <input
               id="todo-input"
               type="text"
-              placeholder="해야 할 일 입력 후 +"
+              placeholder="Enter todo and +"
               className="form-input"
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
@@ -176,7 +78,7 @@ export default function ToDoPinGlobalClient() {
               onClick={addTodo}
               className="btn-add"
               aria-label="Add todo"
-              title="할 일 추가"
+              title="Add todo"
             >
               +
             </button>
@@ -191,18 +93,19 @@ export default function ToDoPinGlobalClient() {
                   onClick={() => removeTodo(idx)}
                   className="btn-delete"
                   aria-label="remove"
-                  title="삭제"
+                  title="Remove"
                 >
-                  삭제
+                  Remove
                 </button>
               </li>
             ))}
             {todos.length === 0 && (
-              <li className="todo-placeholder">할 일을 추가해보세요.</li>
+              <li className="todo-placeholder">Add a todo.</li>
             )}
           </ul>
         </div>
       </div>
-    </SafeDevForm>
+    </SafeDevForm>,
+    document.body
   );
 }
