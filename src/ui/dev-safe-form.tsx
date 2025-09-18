@@ -47,14 +47,14 @@ function SafeDevForm({
           onClick={handleClose}
           className="safe-form__button safe-form__button--cancel"
         >
-          취소
+          Cancel
         </button>
         <button
           type="submit"
           disabled={isLoadingRef.current || disabled}
           className={`safe-form__button safe-form__button--submit ${buttonClassName}`}
         >
-          {isLoadingRef.current ? "로딩 중..." : title}
+          {isLoadingRef.current ? "Loading..." : title}
         </button>
       </div>
     </form>

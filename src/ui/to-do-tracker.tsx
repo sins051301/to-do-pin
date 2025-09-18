@@ -10,6 +10,7 @@ import {
   Trash2,
 } from "lucide-react";
 import "./to-do-tracker.css";
+import { gitUrl, gitToken } from "../context/variable";
 
 type TodoTask = {
   text: string;
@@ -82,9 +83,9 @@ function TodoTracker() {
         const data: PinItem[] = JSON.parse(event.target?.result as string);
         localStorage.setItem("toDoPins", JSON.stringify(data));
         data.forEach((pin) => register(pin));
-        alert("✅ TodoPins 복구 완료");
+        alert("✅ TodoPin restored");
       } catch {
-        alert("❌ JSON 파싱 실패");
+        alert("❌ JSON parsing failed");
       }
     };
     reader.readAsText(file);
@@ -142,19 +143,21 @@ function TodoTracker() {
         <div className="tracker-actions">
           <button
             className={`tracker-btn github-btn ${git ? "linked" : "unlinked"}`}
-            onClick={() => setGit(!git)}
-            title={git ? "GitHub 연동됨" : "GitHub 연동 안됨"}
+            onClick={() => {
+              if (!git && (!gitUrl || !gitToken)) {
+                window.alert("GitHub URL or GitHub Token not found");
+                return;
+              }
+              setGit(!git);
+            }}
+            title={git ? "GitHub linked" : "GitHub unlinked"}
           >
             {git ? "GitHub ✓" : "GitHub X"}
           </button>
           <button onClick={toggleVisible} className="tracker-btn">
             {visible ? <Eye size={16} /> : <EyeOff size={16} />}
           </button>
-          <button
-            onClick={handleExport}
-            className="tracker-btn"
-            title="내보내기"
-          >
+          <button onClick={handleExport} className="tracker-btn" title="export">
             <Download size={16} />
           </button>
 
@@ -162,7 +165,7 @@ function TodoTracker() {
           <button
             onClick={() => fileInputRef.current?.click()}
             className="tracker-btn"
-            title="불러오기"
+            title="import"
           >
             <Upload size={16} />
           </button>
@@ -180,11 +183,11 @@ function TodoTracker() {
               <HelpCircle size={16} />
             </button>
             <div className="tracker-hint">
-              ⚠️ 로컬스토리지가 초기화되면 데이터가 사라질 수 있습니다.
+              ⚠️ Local storage is cleared when the page is refreshed.
               <br />
-              <strong>⬇ 내보내기</strong> 버튼으로 백업 파일을 저장하고,
+              <strong>⬇ export</strong> button to save backup file,
               <br />
-              <strong>⬆ 불러오기</strong> 버튼으로 복구할 수 있습니다.
+              <strong>⬆ import</strong> button to restore.
             </div>
           </div>
 
@@ -203,14 +206,14 @@ function TodoTracker() {
         <ul className="tracker-list">
           {Object.keys(groupedPins).length === 0 ? (
             <li className="tracker-empty">
-              <Inbox size={16} style={{ marginRight: "4px" }} />할 일이
-              없습니다.
+              <Inbox size={16} style={{ marginRight: "4px" }} />
+              No tasks.
             </li>
           ) : (
             Object.entries(groupedPins).map(([url, pins]) => (
               <li key={url} className="tracker-item">
                 <div className="tracker-group">
-                  <div className="tracker-url">위치: {url}</div>
+                  <span className="tracker-url">Page: {url}</span>
                 </div>
                 <ul className="todo-sublist">
                   {pins.map((pin) => (
@@ -224,8 +227,8 @@ function TodoTracker() {
                           }))
                         }
                       >
-                        <div className="tracker-url">
-                          {pin.title || "(제목 없음)"}
+                        <div className="tracker-url-title">
+                          {pin.title || "no title"}
                         </div>
                         <div className="todo-control">
                           <span className="tracker-arrow">
@@ -236,7 +239,9 @@ function TodoTracker() {
                             className="todo-delete-btn"
                             onClick={() => {
                               if (
-                                window.confirm("정말 이 핀을 삭제하시겠습니까?")
+                                window.confirm(
+                                  "Are you sure you want to delete this pin?"
+                                )
                               ) {
                                 remove(pin.id);
                               }

@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
-import { useToDoPin } from "../context/useTodoPin";
 import type { TodoTask } from "../type";
 import { Trash2 } from "lucide-react";
 import "./to-do-pin.css";
-import handleCloseIssue from "../api/handle-close-issue";
-import handleUpdateIssue from "../api/handle-update-issue";
+import useHandlePin from "../context/useHandlePin";
 
 interface TodoPinProps {
   id: string;
@@ -25,91 +22,32 @@ function TodoPin({
   todos,
   issueNumber,
 }: TodoPinProps) {
-  const { register, remove, git } = useToDoPin();
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  const [draftTitle, setDraftTitle] = useState(title || "");
-  const [draftDesc, setDraftDesc] = useState(description || "");
-  const [draftTodos, setDraftTodos] = useState<TodoTask[]>(todos);
-  const [newTodo, setNewTodo] = useState("");
-
-  useEffect(() => {
-    register({
-      id,
-      x,
-      y,
-      url: window.location.pathname,
-      title,
-      description,
-      todos,
-      issueNumber,
-    });
-  }, []);
-
-  // 저장
-  const handleSave = () => {
-    const updated = {
-      id,
-      x,
-      y,
-      url: window.location.pathname,
-      title: draftTitle,
-      description: draftDesc,
-      todos: draftTodos,
-      issueNumber,
-    };
-    register(updated);
-    setIsEditing(false);
-
-    if (git && issueNumber) {
-      handleUpdateIssue(issueNumber, draftTitle, draftDesc, draftTodos);
-    }
-  };
-
-  // 삭제
-  const handleDelete = () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      remove(id);
-      if (git && issueNumber) {
-        handleCloseIssue(issueNumber);
-      }
-    }
-  };
-
-  // Todo 관련 핸들러들
-  const handleTodoChange = (index: number, text: string) => {
-    setDraftTodos((prev) =>
-      prev.map((t, i) => (i === index ? { ...t, text } : t))
-    );
-  };
-
-  const toggleTodoCheck = (index: number) => {
-    setDraftTodos((prev) =>
-      prev.map((t, i) => (i === index ? { ...t, checked: !t.checked } : t))
-    );
-  };
-
-  const removeTodo = (index: number) => {
-    setDraftTodos((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const addTodo = () => {
-    if (!newTodo.trim()) return;
-    setDraftTodos((prev) => [
-      ...prev,
-      { text: newTodo.trim(), checked: false },
-    ]);
-    setNewTodo("");
-  };
-
+  const {
+    draft,
+    dispatch,
+    isEditing,
+    hovered,
+    handleHovering,
+    handleLeaving,
+    handleEditing,
+    handleCanceling,
+    handleSave,
+    handleDelete,
+  } = useHandlePin({
+    id,
+    title,
+    description,
+    x,
+    y,
+    todos,
+    issueNumber,
+  });
   return (
     <div
       className="devpin-container"
       style={{ top: y, left: x }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={handleHovering}
+      onMouseLeave={handleLeaving}
     >
       {!hovered ? (
         // 기본 상태: 아바타만 보임
@@ -137,32 +75,20 @@ function TodoPin({
             />
             {!isEditing ? (
               <div className="devpin-actions">
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="devpin-edit-btn"
-                >
-                  수정
+                <button onClick={handleEditing} className="devpin-edit-btn">
+                  edit
                 </button>
                 <button onClick={handleDelete} className="devpin-delete-btn">
-                  삭제
+                  delete
                 </button>
               </div>
             ) : (
               <div className="devpin-actions">
                 <button onClick={handleSave} className="devpin-save-btn">
-                  확인
+                  save
                 </button>
-                <button
-                  onClick={() => {
-                    setDraftTitle(title || "");
-                    setDraftDesc(description || "");
-                    setDraftTodos(todos);
-                    setNewTodo("");
-                    setIsEditing(false);
-                  }}
-                  className="devpin-cancel-btn"
-                >
-                  취소
+                <button onClick={handleCanceling} className="devpin-cancel-btn">
+                  cancel
                 </button>
               </div>
             )}
@@ -171,41 +97,53 @@ function TodoPin({
           <div className="devpin-body">
             {!isEditing ? (
               <>
-                <h2 className="devpin-section-title">{title || "제목 없음"}</h2>
+                <h2 className="devpin-section-title">{title || "no title"}</h2>
                 <p className="devpin-description">
-                  {description || "설명 없음"}
+                  {description || "no description"}
                 </p>
               </>
             ) : (
               <>
                 <input
-                  value={draftTitle}
-                  onChange={(e) => setDraftTitle(e.target.value)}
+                  value={draft.title}
+                  onChange={(e) =>
+                    dispatch({ type: "SET_TITLE", payload: e.target.value })
+                  }
                   className="devpin-input"
-                  placeholder="제목"
+                  placeholder="title"
                 />
                 <textarea
-                  value={draftDesc}
-                  onChange={(e) => setDraftDesc(e.target.value)}
+                  value={draft.desc}
+                  onChange={(e) =>
+                    dispatch({ type: "SET_DESC", payload: e.target.value })
+                  }
                   className="devpin-textarea"
-                  placeholder="설명"
+                  placeholder="description"
                 />
               </>
             )}
 
             <h3 className="devpin-section-title">Todo</h3>
             <ul className="devpin-todo-list">
-              {draftTodos.map((t, idx) => (
+              {draft.todos.map((t, idx) => (
                 <li key={idx} className="devpin-todo-item">
                   {isEditing ? (
                     <>
                       <input
                         value={t.text}
-                        onChange={(e) => handleTodoChange(idx, e.target.value)}
+                        onChange={(e) =>
+                          dispatch({
+                            type: "CHANGE_TODO",
+                            index: idx,
+                            payload: e.target.value,
+                          })
+                        }
                         className="devpin-input2"
                       />
                       <button
-                        onClick={() => removeTodo(idx)}
+                        onClick={() =>
+                          dispatch({ type: "REMOVE_TODO", index: idx })
+                        }
                         className="todo-delete-btn"
                       >
                         <Trash2 size={16} />
@@ -216,7 +154,9 @@ function TodoPin({
                       <input
                         type="checkbox"
                         checked={t.checked}
-                        onChange={() => toggleTodoCheck(idx)}
+                        onChange={() =>
+                          dispatch({ type: "TOGGLE_TODO", index: idx })
+                        }
                       />
                       <span className={t.checked ? "checked" : ""}>
                         {t.text}
@@ -231,12 +171,17 @@ function TodoPin({
               <div className="todo-add-wrapper">
                 <input
                   type="text"
-                  placeholder="할 일 추가"
-                  value={newTodo}
-                  onChange={(e) => setNewTodo(e.target.value)}
+                  placeholder="add todo"
+                  value={draft.newTodo}
+                  onChange={(e) =>
+                    dispatch({ type: "SET_NEW_TODO", payload: e.target.value })
+                  }
                   className="devpin-input2"
                 />
-                <button onClick={addTodo} className="devpin-save-btn">
+                <button
+                  onClick={() => dispatch({ type: "ADD_TODO" })}
+                  className="devpin-save-btn"
+                >
                   +
                 </button>
               </div>

@@ -1,11 +1,31 @@
 {
   "name": "to-do-pin",
-  "version": "0.0.24",
+  "version": "0.0.30",
   "private": false,
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "keywords": [
+    "react",
+    "todo",
+    "pin",
+    "productivity",
+    "localstorage",
+    "overlay",
+    "task-tracker",
+    "nextjs",
+    "vite",
+    "typescript",
+    "issue",
+    "github"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sins051301/to-do-pin"
+  },
+  "author": "sins0",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -26,7 +46,8 @@
   },
   "scripts": {
     "build": "tsdown",
-    "dev": "vite"
+    "dev": "vite",
+    "release": "npm run build && npm publish --access public"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

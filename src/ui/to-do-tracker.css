@@ -53,6 +53,7 @@
 .tracker-url {
   color: black;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .tracker-item {
@@ -73,9 +74,21 @@
 
 .tracker-url {
   font-size: 12px;
-  color: #6b7280;
+  color: #2563eb;
   white-space: nowrap;
   overflow: hidden;
+  text-align: center;
+  width: 100%;
+  text-overflow: ellipsis;
+  margin-top: 6px;
+}
+
+.tracker-url-title {
+  font-size: 12px;
+  color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: bold;
   text-overflow: ellipsis;
 }
 
@@ -212,15 +225,13 @@
   font-weight: bold;
   padding: 2px 6px;
   border-radius: 4px;
-  transition: background 0.2s, color 0.2s;
 }
 
 .github-btn.linked {
-  background: #e0f2fe; /* 연동됨: 파란 배경 */
+  background: #e0f2fe;
   color: #2563eb;
 }
 
 .github-btn.unlinked {
-  background: #f3f4f6; /* 연동안됨: 회색 배경 */
   color: #4b5563;
 }

@@ -120,6 +120,7 @@
 .devpin-actions {
   display: flex;
   gap: 6px;
+  padding: 10px;
 }
 
 .devpin-edit-btn,
@@ -157,7 +158,7 @@
 }
 
 .devpin-input {
-  width: 60%;
+  width: 90%;
   font-size: 13px;
   padding: 4px 6px;
   margin-top: 4px;
