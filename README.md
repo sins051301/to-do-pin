@@ -40,18 +40,7 @@ export default function App() {
 }
 ```
 
-- **Vite / CRA**
-```env
-VITE_TO_DO_PIN_ENV=development
-```
-
-- **Next.js**
-```env
-NEXT_PUBLIC_TO_DO_PIN_ENV=development
-```
-
 ### Environment Variables
-To enable development mode features (tracker overlay, global pin client, etc.), set the environment variable(`VITE_TO_DO_PIN_ENV` or `NEXT_PUBLIC_TO_DO_PIN_ENV`).
 To enable git integration, set the environment variable(`VITE_GITHUB_URL` and `VITE_GITHUB_TOKEN`).
 VITE_GITHUB_URL should be set to your repository URL without `https://api.github.com`.
 VITE_GITHUB_TOKEN should be set to your GitHub personal access token.
@@ -105,18 +94,7 @@ export default function App() {
 }
 ```
 
-- **Vite / CRA**
-```env
-VITE_TO_DO_PIN_ENV=development
-```
-
-- **Next.js**
-```env
-NEXT_PUBLIC_TO_DO_PIN_ENV=development
-```
-
 ### 환경 변수 설정
-개발 모드 기능(트래커, 글로벌 핀 생성기 등)을 활성화하려면 환경 변수(`VITE_TO_DO_PIN_ENV` 또는 `NEXT_PUBLIC_TO_DO_PIN_ENV`)를 설정해야 합니다.
 깃허브 연동을 위해서는 `VITE_GITHUB_URL`과 `VITE_GITHUB_TOKEN` 환경 변수를 설정해야 합니다.
 VITE_GITHUB_URL은 github.com을 제외한 자신의 레포지토리 주소,
 VITE_GITHUB_TOKEN은 깃허브의 토큰입니다.

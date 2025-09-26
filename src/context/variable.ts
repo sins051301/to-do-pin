@@ -11,8 +11,6 @@ export const gitToken =
   "";
 
 export const devEnv =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_TO_DO_PIN_ENV) ||
-  (typeof process !== "undefined"
-    ? process.env.NEXT_PUBLIC_TO_DO_PIN_ENV
-    : "") ||
+  (typeof import.meta !== "undefined" && import.meta.env?.MODE) ||
+  (typeof process !== "undefined" ? process.env.NODE_ENV : "") ||
   "";
