@@ -16,6 +16,7 @@
   border-radius: 4px;
   cursor: pointer;
   border: none;
+  color: #6b7280;
 }
 
 .safe-form__button--cancel {

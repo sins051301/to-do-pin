@@ -7,56 +7,73 @@
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   color: black;
-
-  /* 전체 padding 제거 */
   padding: 0;
 }
 
 .tracker-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: move;
+  flex-direction: column; /* 제목 위, 버튼 아래 */
+  align-items: flex-start;
   gap: 6px;
-  background: #ddf4ff; /* 연한 파랑 */
-  padding: 4px 6px; /* 최소한의 안쪽 여백 */
+  background: #ddf4ff;
+  padding: 10px;
   border-bottom: 1px solid #e5e7eb;
 }
 
 .tracker-title {
   font-weight: bold;
-  font-size: 12px;
-  user-select: none;
+  font-size: 14px;
   margin: 0;
+}
+
+.tracker-actions {
+  display: flex;
+  flex-wrap: wrap; /* 버튼 많으면 줄바꿈 */
+  gap: 8px;
+  align-items: center;
 }
 
 .tracker-list {
   max-height: 240px;
   overflow-y: auto;
   list-style: none;
-  padding: 6px; /* 본문 padding만 따로 */
+  padding: 10px;
   margin: 0;
   scrollbar-width: thin;
   scrollbar-color: #9ca3af #f3f4f6;
 }
 
-.tracker-toggle {
-  font-size: 20px;
+/* 모든 버튼의 터치 영역 확장 */
+.tracker-btn,
+.tracker-toggle,
+.todo-delete-btn,
+.github-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
   border: none;
   background: transparent;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+}
+
+.tracker-btn:hover,
+.tracker-toggle:hover,
+.todo-delete-btn:hover,
+.github-btn:hover {
+  color: #2563eb;
+}
+
+.tracker-toggle {
+  font-size: 20px;
+  background: transparent;
 }
 
 .tracker-item {
   list-style: none;
-}
-.tracker-url {
-  color: black;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.tracker-item {
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 4px;
 }
@@ -81,6 +98,7 @@
   width: 100%;
   text-overflow: ellipsis;
   margin-top: 6px;
+  font-weight: bold;
 }
 
 .tracker-url-title {
@@ -100,7 +118,7 @@
 .todo-sublist {
   margin-top: 4px;
   list-style: disc inside;
-  padding: 0px;
+  padding: 0;
 }
 
 .todo-item {
@@ -110,8 +128,8 @@
 }
 
 .todo-item input {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
   accent-color: #2563eb;
 }
@@ -127,47 +145,25 @@
 }
 
 .tracker-eye {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #4b5563; /* gray-600 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  height: 35px;
-}
-
-.tracker-eye:hover {
-  color: #2563eb; /* blue-600 */
-}
-
-.tracker-actions {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  justify-content: center;
-  height: 25px;
-  margin-top: 2px;
-}
-
-.tracker-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
   color: #4b5563;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
 }
 
-.tracker-btn:hover {
+.tracker-eye:hover {
   color: #2563eb;
 }
 
 .tracker-hint-wrapper {
   position: relative;
   display: inline-block;
+}
+
+.tracker-placeholder {
+  color: #374151;
 }
 
 .tracker-hint {
@@ -195,29 +191,15 @@
   text-align: center;
   padding: 12px;
   font-size: 12px;
-  color: #9ca3af;
+  color: #374151;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.todo-delete-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #dc2626; /* red-600 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.todo-delete-btn:hover {
-  color: #b91c1c; /* red-700 */
 }
 
 .todo-control {
   display: flex;
-  gap: 4px;
+  gap: 8px; /* 삭제 버튼과 간격 확보 */
   align-items: center;
   justify-content: center;
 }

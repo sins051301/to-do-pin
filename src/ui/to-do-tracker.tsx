@@ -38,13 +38,12 @@ function TodoTracker() {
     git,
     setGit,
   } = useToDoPin();
+
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [open, setOpen] = useState(true);
   const [pos, setPos] = useState({ x: 5, y: 5 });
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 체크 토글
   const toggleCheck = (pinId: string, todoText: string) => {
     const updatedPins = pins.map((pin) =>
       pin.id === pinId
@@ -60,7 +59,6 @@ function TodoTracker() {
     if (updatedPin) register(updatedPin);
   };
 
-  // JSON 내보내기
   const handleExport = () => {
     const blob = new Blob([JSON.stringify(pins, null, 2)], {
       type: "application/json",
@@ -73,7 +71,6 @@ function TodoTracker() {
     URL.revokeObjectURL(url);
   };
 
-  // JSON 불러오기
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -91,7 +88,6 @@ function TodoTracker() {
     reader.readAsText(file);
   };
 
-  // 드래그 이동
   const dragRef = useRef<{
     startX: number;
     startY: number;
@@ -124,7 +120,6 @@ function TodoTracker() {
     document.removeEventListener("mouseup", handleMouseUp);
   };
 
-  // url별 그룹핑
   const groupedPins = pins.reduce<Record<string, PinItem[]>>((acc, pin) => {
     if (!acc[pin.url]) acc[pin.url] = [];
     acc[pin.url].push(pin);
@@ -150,22 +145,28 @@ function TodoTracker() {
               }
               setGit(!git);
             }}
-            title={git ? "GitHub linked" : "GitHub unlinked"}
+            aria-label={git ? "Disconnect GitHub" : "Connect GitHub"}
           >
             {git ? "GitHub ✓" : "GitHub X"}
           </button>
-          <button onClick={toggleVisible} className="tracker-btn">
+          <button
+            onClick={toggleVisible}
+            className="tracker-btn"
+            aria-label={visible ? "Hide pins" : "Show pins"}
+          >
             {visible ? <Eye size={16} /> : <EyeOff size={16} />}
           </button>
-          <button onClick={handleExport} className="tracker-btn" title="export">
+          <button
+            onClick={handleExport}
+            className="tracker-btn"
+            aria-label="Export tasks"
+          >
             <Download size={16} />
           </button>
-
-          {/* 불러오기 */}
           <button
             onClick={() => fileInputRef.current?.click()}
             className="tracker-btn"
-            title="import"
+            aria-label="Import tasks"
           >
             <Upload size={16} />
           </button>
@@ -176,13 +177,15 @@ function TodoTracker() {
             accept="application/json"
             onChange={handleImport}
           />
-
-          {/* Hint */}
           <div className="tracker-hint-wrapper">
-            <button className="tracker-btn" title="도움말">
-              <HelpCircle size={16} />
+            <button
+              className="tracker-btn"
+              aria-label="Help"
+              aria-describedby="tracker-hint"
+            >
+              <HelpCircle size={16} aria-hidden="true" />
             </button>
-            <div className="tracker-hint">
+            <div id="tracker-hint" role="tooltip" className="tracker-hint">
               ⚠️ Local storage is cleared when the page is refreshed.
               <br />
               <strong>⬇ export</strong> button to save backup file,
@@ -190,8 +193,6 @@ function TodoTracker() {
               <strong>⬆ import</strong> button to restore.
             </div>
           </div>
-
-          {/* 열고닫기 */}
           <button
             onClick={() => setOpen(!open)}
             className="tracker-toggle"
@@ -206,7 +207,11 @@ function TodoTracker() {
         <ul className="tracker-list">
           {Object.keys(groupedPins).length === 0 ? (
             <li className="tracker-empty">
-              <Inbox size={16} style={{ marginRight: "4px" }} />
+              <Inbox
+                size={16}
+                aria-hidden="true"
+                style={{ marginRight: "4px" }}
+              />
               No tasks.
             </li>
           ) : (
@@ -226,6 +231,10 @@ function TodoTracker() {
                             [pin.id]: !prev[pin.id],
                           }))
                         }
+                        role="button"
+                        tabIndex={0}
+                        aria-expanded={!collapsed[pin.id]}
+                        aria-controls={`todos-${pin.id}`}
                       >
                         <div className="tracker-url-title">
                           {pin.title || "no title"}
@@ -234,7 +243,6 @@ function TodoTracker() {
                           <span className="tracker-arrow">
                             {collapsed[pin.id] ? "▸" : "▾"}
                           </span>
-
                           <button
                             className="todo-delete-btn"
                             onClick={() => {
@@ -246,27 +254,34 @@ function TodoTracker() {
                                 remove(pin.id);
                               }
                             }}
-                            title="핀 삭제"
+                            aria-label="Delete pin"
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={14} aria-hidden="true" />
                           </button>
                         </div>
                       </div>
                       {!collapsed[pin.id] && (
-                        <ul className="todo-sublist">
-                          {pin.todos.map((todo) => (
+                        <ul
+                          className="todo-sublist"
+                          id={`todos-${pin.id}`}
+                          aria-label={`Todos for ${pin.title || "pin"}`}
+                        >
+                          {pin.todos.map((todo, idx) => (
                             <li
                               key={`${pin.id}-${todo.text}`}
                               className="todo-item"
                             >
                               <input
+                                id={`todo-${pin.id}-${idx}`}
                                 type="checkbox"
                                 checked={todo.checked}
                                 onChange={() => toggleCheck(pin.id, todo.text)}
                               />
-                              <span className={todo.checked ? "checked" : ""}>
-                                {todo.text}
-                              </span>
+                              <label htmlFor={`todo-${pin.id}-${idx}`}>
+                                <span className={todo.checked ? "checked" : ""}>
+                                  {todo.text}
+                                </span>
+                              </label>
                             </li>
                           ))}
                         </ul>

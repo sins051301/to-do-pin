@@ -42,6 +42,7 @@ function TodoPin({
     todos,
     issueNumber,
   });
+
   return (
     <div
       className="devpin-container"
@@ -50,7 +51,6 @@ function TodoPin({
       onMouseLeave={handleLeaving}
     >
       {!hovered ? (
-        // 기본 상태: 아바타만 보임
         <div className="devpin-avatar-wrapper">
           <div className="devpin-avatar">
             <img
@@ -64,7 +64,6 @@ function TodoPin({
           </div>
         </div>
       ) : (
-        // Hover 시 세부 내용 표시
         <>
           <div className="devpin-header">
             <img
@@ -75,19 +74,35 @@ function TodoPin({
             />
             {!isEditing ? (
               <div className="devpin-actions">
-                <button onClick={handleEditing} className="devpin-edit-btn">
+                <button
+                  onClick={handleEditing}
+                  className="devpin-edit-btn"
+                  aria-label="Edit note"
+                >
                   edit
                 </button>
-                <button onClick={handleDelete} className="devpin-delete-btn">
+                <button
+                  onClick={handleDelete}
+                  className="devpin-delete-btn"
+                  aria-label="Delete note"
+                >
                   delete
                 </button>
               </div>
             ) : (
               <div className="devpin-actions">
-                <button onClick={handleSave} className="devpin-save-btn">
+                <button
+                  onClick={handleSave}
+                  className="devpin-save-btn"
+                  aria-label="Save note"
+                >
                   save
                 </button>
-                <button onClick={handleCanceling} className="devpin-cancel-btn">
+                <button
+                  onClick={handleCanceling}
+                  className="devpin-cancel-btn"
+                  aria-label="Cancel editing"
+                >
                   cancel
                 </button>
               </div>
@@ -97,14 +112,20 @@ function TodoPin({
           <div className="devpin-body">
             {!isEditing ? (
               <>
-                <h2 className="devpin-section-title">{title || "no title"}</h2>
+                <p role="heading" aria-level={3} className="devpin-section-title">
+                  {title || "no title"}
+                </p>
                 <p className="devpin-description">
                   {description || "no description"}
                 </p>
               </>
             ) : (
               <>
+                <label htmlFor={`title-${id}`} className="sr-only">
+                  Title
+                </label>
                 <input
+                  id={`title-${id}`}
                   value={draft.title}
                   onChange={(e) =>
                     dispatch({ type: "SET_TITLE", payload: e.target.value })
@@ -112,7 +133,11 @@ function TodoPin({
                   className="devpin-input"
                   placeholder="title"
                 />
+                <label htmlFor={`desc-${id}`} className="sr-only">
+                  Description
+                </label>
                 <textarea
+                  id={`desc-${id}`}
                   value={draft.desc}
                   onChange={(e) =>
                     dispatch({ type: "SET_DESC", payload: e.target.value })
@@ -123,13 +148,19 @@ function TodoPin({
               </>
             )}
 
-            <h3 className="devpin-section-title">Todo</h3>
+            <p role="heading" aria-level={4} className="devpin-section-title">
+              Todo
+            </p>
             <ul className="devpin-todo-list">
               {draft.todos.map((t, idx) => (
                 <li key={idx} className="devpin-todo-item">
                   {isEditing ? (
                     <>
+                      <label htmlFor={`todo-${id}-${idx}`} className="sr-only">
+                        Todo item {idx + 1}
+                      </label>
                       <input
+                        id={`todo-${id}-${idx}`}
                         value={t.text}
                         onChange={(e) =>
                           dispatch({
@@ -145,22 +176,26 @@ function TodoPin({
                           dispatch({ type: "REMOVE_TODO", index: idx })
                         }
                         className="todo-delete-btn"
+                        aria-label={`Remove todo: ${t.text}`}
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={16} aria-hidden="true" />
                       </button>
                     </>
                   ) : (
                     <>
                       <input
+                        id={`todo-check-${id}-${idx}`}
                         type="checkbox"
                         checked={t.checked}
                         onChange={() =>
                           dispatch({ type: "TOGGLE_TODO", index: idx })
                         }
                       />
-                      <span className={t.checked ? "checked" : ""}>
-                        {t.text}
-                      </span>
+                      <label htmlFor={`todo-check-${id}-${idx}`}>
+                        <span className={t.checked ? "checked" : ""}>
+                          {t.text}
+                        </span>
+                      </label>
                     </>
                   )}
                 </li>
@@ -169,7 +204,11 @@ function TodoPin({
 
             {isEditing && (
               <div className="todo-add-wrapper">
+                <label htmlFor={`new-todo-${id}`} className="sr-only">
+                  New todo
+                </label>
                 <input
+                  id={`new-todo-${id}`}
                   type="text"
                   placeholder="add todo"
                   value={draft.newTodo}
@@ -181,6 +220,7 @@ function TodoPin({
                 <button
                   onClick={() => dispatch({ type: "ADD_TODO" })}
                   className="devpin-save-btn"
+                  aria-label="Add todo"
                 >
                   +
                 </button>
