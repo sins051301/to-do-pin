@@ -4,8 +4,7 @@
 
 ---
 
-
-![최신](https://github.com/user-attachments/assets/02ffb6bc-4462-4c1a-81e8-1f21a7db0c88)
+![녹음 2025-10-18 032828 (1)](https://github.com/user-attachments/assets/8480b4ce-d708-4dab-ace3-2f799c361f23)
 
 
 ## English
