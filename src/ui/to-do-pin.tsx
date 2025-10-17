@@ -185,30 +185,32 @@ function TodoPin({
                       </button>
                     </li>
                   ))
-                : pins.find((p) => p.id === id)?.todos.map((t, idx) => (
-                    <li key={idx} className="devpin-todo-item">
-                      <input
-                        id={`todo-check-${id}-${idx}`}
-                        type="checkbox"
-                        checked={t.checked}
-                        onChange={() => toggleChecked(idx)}
-                      />
-                      <label htmlFor={`todo-check-${id}-${idx}`}>
-                        <span className={t.checked ? "checked" : ""}>
-                          {t.text}
-                        </span>
-                      </label>
-                    </li>
-                  ))}
+                : pins
+                    .find((p) => p.id === id)
+                    ?.todos.map((t, idx) => (
+                      <li key={idx} className="devpin-todo-item">
+                        <input
+                          id={`todo-check-${id}-${idx}`}
+                          type="checkbox"
+                          checked={t.checked}
+                          onChange={() => toggleChecked(idx)}
+                        />
+                        <label htmlFor={`todo-check-${id}-${idx}`}>
+                          <span className={t.checked ? "checked" : ""}>
+                            {t.text}
+                          </span>
+                        </label>
+                      </li>
+                    ))}
             </ul>
 
             {isEditing && (
-              <div className="todo-add-wrapper">
+              <>
                 <label
                   htmlFor={`new-todo-${id}`}
                   className="devpin-section-title"
                 >
-                  New todo
+                  New Todo
                 </label>
                 <input
                   id={`new-todo-${id}`}
@@ -227,7 +229,7 @@ function TodoPin({
                 >
                   +
                 </button>
-              </div>
+              </>
             )}
           </div>
         </>
