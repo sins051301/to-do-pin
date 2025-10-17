@@ -32,6 +32,8 @@ function TodoPin({
     handleEditing,
     handleCanceling,
     handleSave,
+    toggleChecked,
+    pins,
     handleDelete,
   } = useHandlePin({
     id,
@@ -112,7 +114,11 @@ function TodoPin({
           <div className="devpin-body">
             {!isEditing ? (
               <>
-                <p role="heading" aria-level={3} className="devpin-section-title">
+                <p
+                  role="heading"
+                  aria-level={3}
+                  className="devpin-section-title"
+                >
                   {title || "no title"}
                 </p>
                 <p className="devpin-description">
@@ -121,7 +127,7 @@ function TodoPin({
               </>
             ) : (
               <>
-                <label htmlFor={`title-${id}`} className="sr-only">
+                <label htmlFor={`title-${id}`} className="devpin-section-title">
                   Title
                 </label>
                 <input
@@ -133,7 +139,7 @@ function TodoPin({
                   className="devpin-input"
                   placeholder="title"
                 />
-                <label htmlFor={`desc-${id}`} className="sr-only">
+                <label htmlFor={`desc-${id}`} className="devpin-section-title">
                   Description
                 </label>
                 <textarea
@@ -152,13 +158,10 @@ function TodoPin({
               Todo
             </p>
             <ul className="devpin-todo-list">
-              {draft.todos.map((t, idx) => (
-                <li key={idx} className="devpin-todo-item">
-                  {isEditing ? (
-                    <>
-                      <label htmlFor={`todo-${id}-${idx}`} className="sr-only">
-                        Todo item {idx + 1}
-                      </label>
+              {isEditing
+                ? draft.todos.map((t, idx) => (
+                    <li key={idx} className="devpin-todo-item">
+                      <label htmlFor={`todo-${id}-${idx}`}>{idx + 1}.</label>
                       <input
                         id={`todo-${id}-${idx}`}
                         value={t.text}
@@ -180,31 +183,31 @@ function TodoPin({
                       >
                         <Trash2 size={16} aria-hidden="true" />
                       </button>
-                    </>
-                  ) : (
-                    <>
+                    </li>
+                  ))
+                : pins.find((p) => p.id === id)?.todos.map((t, idx) => (
+                    <li key={idx} className="devpin-todo-item">
                       <input
                         id={`todo-check-${id}-${idx}`}
                         type="checkbox"
                         checked={t.checked}
-                        onChange={() =>
-                          dispatch({ type: "TOGGLE_TODO", index: idx })
-                        }
+                        onChange={() => toggleChecked(idx)}
                       />
                       <label htmlFor={`todo-check-${id}-${idx}`}>
                         <span className={t.checked ? "checked" : ""}>
                           {t.text}
                         </span>
                       </label>
-                    </>
-                  )}
-                </li>
-              ))}
+                    </li>
+                  ))}
             </ul>
 
             {isEditing && (
               <div className="todo-add-wrapper">
-                <label htmlFor={`new-todo-${id}`} className="sr-only">
+                <label
+                  htmlFor={`new-todo-${id}`}
+                  className="devpin-section-title"
+                >
                   New todo
                 </label>
                 <input

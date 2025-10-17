@@ -52,14 +52,16 @@
 .devpin-section-title {
   font-weight: bold;
   border-bottom: 1px solid #e5e7eb;
-  margin-bottom: 1px;
+  margin-bottom: 4px;
   margin-top: 1px;
+  width: 100%;
   font-size: 14px;
+  display: inline-block;
   color: #1f2937;
 }
 
 .devpin-description {
-  margin-top: 4px;
+  margin-top: 0px;
   margin-bottom: 12px;
   color: #1f2937;
 }
@@ -74,7 +76,8 @@
 .devpin-todo-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
+  height: 30px;
   color: #1f2937;
 }
 
@@ -158,28 +161,31 @@
 
 .devpin-input {
   width: 90%;
-  font-size: 13px;
+  font-size: 12px;
   padding: 4px 6px;
   margin-top: 4px;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   color: #6b7280;
+  margin-bottom: 12px;
 }
 .devpin-textarea {
   width: 90%;
-  font-size: 13px;
+  font-size: 12px;
   padding: 4px 6px;
   margin-top: 4px;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   font-weight: 500;
+  margin-bottom: 12px;
 }
 
 .devpin-input2 {
   width: 80%;
-  font-size: 13px;
+  font-size: 12px;
   padding: 4px 6px;
   margin-top: 4px;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
+  height: 14px;
 }

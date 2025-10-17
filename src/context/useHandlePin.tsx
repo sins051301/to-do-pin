@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import type { TodoTask } from "../type";
 import { useToDoPin } from "./useTodoPin";
 import handleCloseIssue from "../api/handle-close-issue";
@@ -81,7 +81,7 @@ function useHandlePin({
   todos,
   issueNumber,
 }: HandlePinProps) {
-  const { register, remove, git } = useToDoPin();
+  const { register, remove, git, todos: pins } = useToDoPin();
   const [isEditing, setIsEditing] = useState(false);
   const [hovered, setHovered] = useState(false);
 
@@ -91,22 +91,10 @@ function useHandlePin({
     todos: todos || [],
     newTodo: "",
   });
-
-  useEffect(() => {
-    register({
-      id,
-      x,
-      y,
-      url: window.location.pathname,
-      title,
-      description,
-      todos,
-      issueNumber,
-    });
-  }, []);
-
   const handleHovering = () => setHovered(true);
-  const handleLeaving = () => setHovered(false);
+  const handleLeaving = () => {
+    if (!isEditing) setHovered(false);
+  };
 
   const handleEditing = () => setIsEditing(true);
   const handleCanceling = () => {
@@ -119,6 +107,25 @@ function useHandlePin({
         todos: todos || [],
         newTodo: "",
       },
+    });
+  };
+
+  const toggleChecked = (index: number) => {
+    const newTodos = draft.todos.map((t, i) =>
+      i === index ? { ...t, checked: !t.checked } : t
+    );
+
+    dispatch({ type: "TOGGLE_TODO", index });
+
+    register({
+      id,
+      x,
+      y,
+      url: window.location.pathname,
+      title,
+      description,
+      todos: newTodos,
+      issueNumber,
     });
   };
 
@@ -161,6 +168,8 @@ function useHandlePin({
     handleCanceling,
     handleSave,
     handleDelete,
+    toggleChecked,
+    pins,
   };
 }
 

@@ -1,16 +1,58 @@
+/* === 컨테이너 / 공통 === */
 .devpin-tracker {
   position: fixed;
   z-index: 9999;
-  border: 1px solid #ccc;
-  background: white;
+  background: transparent;
   font-size: 12px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   color: black;
   padding: 0;
 }
 
+/* FAB만 보일 때: 박스 스타일 제거 */
+.devpin-tracker.is-closed {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+/* === FAB 버튼 === */
+.tracker-fab {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ddf4ff;
+  color: #fff;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.tracker-fab:hover {
+  background: #1d4ed8;
+}
+
+/* === 패널 ===
+   overflow: visible 로 툴팁이 잘리지 않게.
+   스크롤은 아래 .tracker-list 가 담당 */
+.tracker-panel {
+  margin-top: 8px;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  width: 310px;
+  overflow: visible; /* sticky header/tooltip 보장 */
+}
+
+/* === 헤더(고정) === */
 .tracker-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column; /* 제목 위, 버튼 아래 */
   align-items: flex-start;
@@ -18,6 +60,7 @@
   background: #ddf4ff;
   padding: 10px;
   border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .tracker-title {
@@ -28,22 +71,41 @@
 
 .tracker-actions {
   display: flex;
-  flex-wrap: wrap; /* 버튼 많으면 줄바꿈 */
-  gap: 8px;
+  gap: 2px;
   align-items: center;
 }
 
+/* === 리스트(여기만 스크롤) === */
 .tracker-list {
-  max-height: 240px;
-  overflow-y: auto;
+  max-height: 480px; /* 필요 시 높이 조절 */
+  overflow-y: auto; /* 수직 스크롤 주체 */
+  overflow-x: hidden;
   list-style: none;
-  padding: 10px;
+  padding: 16px;
   margin: 0;
+  background-color: #fff;
+  /* Firefox 얇은 스크롤 */
   scrollbar-width: thin;
   scrollbar-color: #9ca3af #f3f4f6;
+  scrollbar-gutter: stable;
+}
+/* WebKit 얇은 스크롤 */
+.tracker-list::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.tracker-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tracker-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.tracker-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
-/* 모든 버튼의 터치 영역 확장 */
+/* === 버튼 / 터치타겟 === */
 .tracker-btn,
 .tracker-toggle,
 .todo-delete-btn,
@@ -59,7 +121,6 @@
   justify-content: center;
   color: #4b5563;
 }
-
 .tracker-btn:hover,
 .tracker-toggle:hover,
 .todo-delete-btn:hover,
@@ -72,12 +133,26 @@
   background: transparent;
 }
 
+.github-btn {
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  width: 80px;
+}
+.github-btn.linked {
+  background: #e0f2fe;
+  color: #2563eb;
+}
+.github-btn.unlinked {
+  color: #4b5563;
+}
+
+/* === 목록/아이템 === */
 .tracker-item {
   list-style: none;
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 4px;
 }
-
 .tracker-item:last-child {
   border-bottom: none;
 }
@@ -115,6 +190,17 @@
   color: #3b82f6;
 }
 
+.tracker-empty {
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === 할일 목록 === */
 .todo-sublist {
   margin-top: 4px;
   list-style: disc inside;
@@ -126,24 +212,29 @@
   align-items: center;
   gap: 6px;
 }
-
 .todo-item input {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   cursor: pointer;
   accent-color: #2563eb;
 }
-
+.todo-item span {
+  font-size: 13px;
+  color: #1f2937;
+}
 .todo-item span.checked {
   text-decoration: line-through;
   color: #9ca3af;
 }
 
-.todo-item span {
-  font-size: 13px;
-  color: #1f2937;
+.todo-control {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
 }
 
+/* === 눈 아이콘 버튼 === */
 .tracker-eye {
   color: #4b5563;
   display: flex;
@@ -152,20 +243,15 @@
   width: 44px;
   height: 44px;
 }
-
 .tracker-eye:hover {
   color: #2563eb;
 }
 
+/* === 툴팁 (헤더 안에서 overflow 안 잘리도록) === */
 .tracker-hint-wrapper {
   position: relative;
   display: inline-block;
 }
-
-.tracker-placeholder {
-  color: #374151;
-}
-
 .tracker-hint {
   display: none;
   position: absolute;
@@ -182,39 +268,11 @@
   z-index: 10000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
-
 .tracker-hint-wrapper:hover .tracker-hint {
   display: block;
 }
 
-.tracker-empty {
-  text-align: center;
-  padding: 12px;
-  font-size: 12px;
+/* === 플레이스홀더 색(대비 개선) === */
+.tracker-placeholder {
   color: #374151;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.todo-control {
-  display: flex;
-  gap: 8px; /* 삭제 버튼과 간격 확보 */
-  align-items: center;
-  justify-content: center;
-}
-
-.github-btn {
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 4px;
-}
-
-.github-btn.linked {
-  background: #e0f2fe;
-  color: #2563eb;
-}
-
-.github-btn.unlinked {
-  color: #4b5563;
 }
